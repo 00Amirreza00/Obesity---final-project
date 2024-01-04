@@ -26,6 +26,8 @@ for i in range(3):
     random_indexes = random_state.randint(0,df[random_column].shape[0], int(len(df.index)*0.02+i/100*len(df.index)))
     df[random_column][random_indexes] = np.nan
 
+
+
 # np.random.seed(42)
 # df[df.columns[np.random.randint(0, len(df.columns))]][np.random.randint(0,len(df.index),] = np.nan
 # df[df.columns[np.random.randint(0, len(df.columns))]][np.random.randint(0,len(df.index),int(len(df.index)*0.02))] = np.nan
@@ -40,6 +42,12 @@ i=0
 while sorted_nan_values.values[i]!=0:
     df[sorted_nan_values.index[i]].fillna(df[sorted_nan_values.index[i]].mean(), inplace=True)
     i=i+1
+
+df.FCVC=round(df.FCVC)
+df.NCP=round(df.NCP)
+df.CH2O=round(df.CH2O)
+df.FAF=round(df.FAF)
+df.TUE=round(df.TUE)
 
 
 #data preprocessing
@@ -61,5 +69,34 @@ df_copy['NObeyesdad'].replace(dict(zip(df_copy['NObeyesdad'].unique(),np.arange(
 df_corr=df_copy.corr()
 print('Corrolation between y and the other features: ',df_corr['NObeyesdad'].sort_values(ascending=False))
 
+plt.figure(figsize=(20,20))
+sns.heatmap(df_corr,annot=True,cmap='coolwarm')
 
+
+df_groupby=df.groupby('NObeyesdad')
+
+plt= df_groupby['Weight'].mean().plot(kind='bar', figsize=(8,6))
+plt = df_groupby['Age'].mean().plot(kind='bar', figsize=(8,6))
+plt = df_groupby['FCVC'].mean().plot(kind='bar', figsize=(8,6))
+df_groupby['NCP'].mean().plot(kind='bar', figsize=(8,6))
+plt = df_groupby['FAF'].mean().plot(kind='bar', figsize=(8,6))
+plt = df_groupby['TUE'].mean().plot(kind='bar', figsize=(8,6))  
+
+plt = df_groupby['CALC'].value_counts().plot(kind='bar', figsize=(8,6))
+plt = df_groupby['MTRANS'].value_counts().plot(kind='bar', figsize=(8,6))
+plt = df_groupby['CAEC'].value_counts().plot(kind='bar', figsize=(8,6))
+
+
+
+obesity_df_new = df.copy()
+obesity_df_new['NObeyesdad'].replace(dict(zip(list(df.groupby('NObeyesdad').groups.keys()),[0,0,1,1,1,1,1])),inplace=True)
+
+
+plt.figure(figsize=(8,6))
+ax =obesity_df_new.groupby('NObeyesdad')['Weight'].mean().plot(kind='bar')
+ax.set_ylabel('Weight')
+ax.set_xlabel('Obesity')
+ax.set_title('Weight vs obesity')
+ax.xaxis.set_ticklabels(['no','yes'],rotation=0)
+plt.show()
 
