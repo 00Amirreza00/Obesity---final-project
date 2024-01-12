@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-st.image('111.jpg')
+st.image('pict.jpg')
 
 st.title('Obesity Project')
 st.write('The dataset includes data for the estimation of obesity levels in individuals from the countries of Mexico, Peru, and Colombia, based on their eating habits and physical condition. The dataset consists of 17 attributes and 2111 records, each labeled with the class variable "NObesity" (Obesity Level), allowing for the classification of data using feature values. ')
