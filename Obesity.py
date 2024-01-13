@@ -19,7 +19,7 @@ if st.button('Variables table'):
 if st.button('Raw data'):
     st.write(df)
 
-st.sidebar.title('Obesity Project')
+st.sidebar.title('Variables table')
 st.sidebar.write(pd.read_csv('variables_table.csv').iloc[5:,[0,3]].reset_index(drop=True))
 
 st.subheader('Data Cleaning and Preprocessing')
@@ -112,8 +112,6 @@ with st.expander("See explanation"):
         sns.heatmap(df_copy_corr,annot=True,cmap='coolwarm')
         st.write(pl)
 
-
-
     st.write('Select a feature to plot vs Obesity types:')
     selected_feature=st.selectbox('',['Select one option','Weight','Age','FCVC','NCP','FAF','TUE'])
     if selected_feature!='Select one option':
@@ -121,76 +119,83 @@ with st.expander("See explanation"):
         ax=df_groupby[selected_feature].mean().plot(kind='bar',title=selected_feature+' vs Obesity Levels',xlabel='Obesity Level',ylabel='Average '+selected_feature)
         st.write(fig)
 
-    st.write('Select a feature to plot vs Obesity types:')
-    fig,ax = plt.figure(figsize=(8,6)),plt.axes()
-    ax =obesity_df_new.groupby('NObeyesdad')['CAEC'].value_counts().plot(kind='bar',color=['red','red','red','red','blue','blue','blue','blue'])
-    ax.set_ylabel('# of people')
-    ax.set_xlabel('Obesity')
-    ax.set_title('CAEC vs obesity')
-    # ax.xaxis.set_ticklabels(['no','yes'],rotation=0)
-    st.write(fig)
+    st.write('All types of obesity are cosidered as one class and the Normal and Insufficient weight are considered as another class.')
+    st.write('The data is then plotted again based on the new target variable.')
+    
+    selected_fn= st.selectbox('Show the distribution of the new target variable:',options=['Select one option','Having food between meals - CAEC','Transportation type - MTRANS','Consuming alcohol - CALC','Weight','SMOKE','Family history with overweight','Physical activity frequency - FAF'])
+    if selected_fn!='Select one option':
+        if selected_fn=='Having food between meals - CAEC':
+            fig,ax = plt.figure(figsize=(8,6)),plt.axes()
+            ax =obesity_df_new.groupby('NObeyesdad')['CAEC'].value_counts().plot(kind='bar',color=['red','red','red','red','blue','blue','blue','blue'])
+            ax.set_ylabel('# of people')
+            ax.set_xlabel('Obesity')
+            ax.set_title('CAEC vs obesity')
+            st.write(fig)
 
-    fig,ax = plt.figure(figsize=(8,6)),plt.axes()
-    ax =obesity_df_new.groupby('NObeyesdad')['MTRANS'].value_counts().plot(kind='bar',color=['red','red','red','red','red','blue','blue','blue','blue','blue'])
-    ax.set_ylabel('# of people')
-    ax.set_xlabel('Obesity')
-    ax.set_title('MTRANS vs obesity')
-    # ax.xaxis.set_ticklabels(['no','yes'],rotation=0)
-    st.write(fig)
+        if selected_fn=='Transportation type - MTRANS':
+            fig,ax = plt.figure(figsize=(8,6)),plt.axes()
+            ax =obesity_df_new.groupby('NObeyesdad')['MTRANS'].value_counts().plot(kind='bar',color=['red','red','red','red','red','blue','blue','blue','blue','blue'])
+            ax.set_ylabel('# of people')
+            ax.set_xlabel('Obesity')
+            ax.set_title('MTRANS vs obesity')
+            st.write(fig)
 
-    fig,ax = plt.figure(figsize=(8,6)),plt.axes()
-    ax =obesity_df_new.groupby('NObeyesdad')['CALC'].value_counts().plot(kind='bar',color=['red','red','red','red','blue','blue','blue'])
-    ax.set_ylabel('# of people')
-    ax.set_xlabel('Obesity')
-    ax.set_title('CALC vs obesity')
-    # ax.xaxis.set_ticklabels(['no','yes'],rotation=0)
-    st.write(fig)
+        if selected_fn=='Consuming alcohol - CALC':
+            fig,ax = plt.figure(figsize=(8,6)),plt.axes()
+            ax =obesity_df_new.groupby('NObeyesdad')['CALC'].value_counts().plot(kind='bar',color=['red','red','red','red','blue','blue','blue'])
+            ax.set_ylabel('# of people')
+            ax.set_xlabel('Obesity')
+            ax.set_title('CALC vs obesity')
+            st.write(fig)
 
-    fig,ax = plt.figure(figsize=(8,6)),plt.axes()
-    ax =obesity_df_new.groupby('NObeyesdad')['Weight'].mean().plot(kind='bar',color=['red','blue'])
-    ax.set_ylabel('Average Weight')
-    ax.set_xlabel('Obesity')
-    ax.set_title('Weight vs obesity')
-    ax.xaxis.set_ticklabels(['no','yes'],rotation=0)
-    st.write(fig)
+        if selected_fn=='Weight':
+            fig,ax = plt.figure(figsize=(8,6)),plt.axes()
+            ax =obesity_df_new.groupby('NObeyesdad')['Weight'].mean().plot(kind='bar',color=['red','blue'])
+            ax.set_ylabel('Average Weight')
+            ax.set_xlabel('Obesity')
+            ax.set_title('Weight vs obesity')
+            ax.xaxis.set_ticklabels(['no','yes'],rotation=0)
+            st.write(fig)
 
-    fig,ax = plt.figure(figsize=(8,6)),plt.axes()
-    ax =obesity_df_new.groupby('NObeyesdad')['SMOKE'].value_counts().plot(kind='bar',stacked=True,rot=0,color=['red','red','blue','blue'])
-    ax.set_ylabel('# of people')
-    ax.set_xlabel('Obesity')
-    ax.set_title('Smoking vs obesity')
-    ax.xaxis.set_ticklabels(labels=['No obesity - No Smoking','No obesity - Smoking', 'Obesity - No Smoking','Obesity - Smoking'],rotation=30)
-    st.write(fig)
+        if selected_fn=='SMOKE':
+            fig,ax = plt.figure(figsize=(8,6)),plt.axes()
+            ax =obesity_df_new.groupby('NObeyesdad')['SMOKE'].value_counts().plot(kind='bar',stacked=True,rot=0,color=['red','red','blue','blue'])
+            ax.set_ylabel('# of people')
+            ax.set_xlabel('Obesity')
+            ax.set_title('Smoking vs obesity')
+            ax.xaxis.set_ticklabels(labels=['No obesity - No Smoking','No obesity - Smoking', 'Obesity - No Smoking','Obesity - Smoking'],rotation=30)
+            st.write(fig)
 
-    fig,ax = plt.figure(figsize=(8,6)),plt.axes()
-    ax =obesity_df_new.groupby('NObeyesdad')['family_history_with_overweight'].value_counts().plot(kind='bar',stacked=True,rot=0,color=['red','red','blue','blue'])
-    ax.set_ylabel('# of people')
-    ax.set_xlabel('Obesity')
-    ax.set_title('Family history with overweight vs obesity')
-    ax.xaxis.set_ticklabels(labels=['No obesity - No family history','No obesity - family history', 'Obesity - No family history','Obesity - family history'],rotation=30)
-    st.write(fig)
+        if selected_fn=='Family history with overweight':
+            fig,ax = plt.figure(figsize=(8,6)),plt.axes()
+            ax =obesity_df_new.groupby('NObeyesdad')['family_history_with_overweight'].value_counts().plot(kind='bar',stacked=True,rot=0,color=['red','red','blue','blue'])
+            ax.set_ylabel('# of people')
+            ax.set_xlabel('Obesity')
+            ax.set_title('Family history with overweight vs obesity')
+            ax.xaxis.set_ticklabels(labels=['No obesity - No family history','No obesity - family history', 'Obesity - No family history','Obesity - family history'],rotation=30)
+            st.write(fig)
 
-    fig,ax = plt.figure(figsize=(8,6)),plt.axes()
-    plt.bar([0,1],obesity_df_new.groupby('NObeyesdad')['FAF'].mean(),color=['red','blue'])
-    plt.ylabel('Average FAF')
-    plt.xlabel('Obesity')
-    plt.title('FAF vs obesity')
-    plt.xticks([0,1],['No','Yes'],rotation=0)
-    st.write(fig)
+        if selected_fn=='Physical activity frequency - FAF':
+            fig,ax = plt.figure(figsize=(8,6)),plt.axes()
+            plt.bar([0,1],obesity_df_new.groupby('NObeyesdad')['FAF'].mean(),color=['red','blue'])
+            plt.ylabel('Average FAF')
+            plt.xlabel('Obesity')
+            plt.title('FAF vs obesity')
+            plt.xticks([0,1],['No','Yes'],rotation=0)
+            st.write(fig)
 
-# Modelling Part ------------------------------------------
+# Modelling Part ---------------------------------------------------
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.cluster import KMeans
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import Ridge
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix,  mean_squared_error
+from sklearn.metrics import classification_report
+
 st.subheader('Data Modelling')
 with st.expander("See explanation"):
-
-    from sklearn.model_selection import train_test_split
-    from sklearn.linear_model import LinearRegression
-    from sklearn.cluster import KMeans
-    from sklearn.neighbors import KNeighborsClassifier
-    from sklearn.linear_model import Ridge
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.metrics import confusion_matrix,  mean_squared_error
-    from sklearn.metrics import classification_report
-
     # train test split
     st.write('The data is split into train and test sets and then the following models are trained and evaluated:')
     st.write('1. Linear Regression')
@@ -199,7 +204,7 @@ with st.expander("See explanation"):
     st.write('4. KMeans Clustering')
 
 
-    model_selected= st.selectbox('Select a model:',['Linear Regression','KNN','Ridge Regression','KMeans Clustering'])
+    model_selected= st.selectbox('Select a model:',['Select one option','Linear Regression','KNN','Ridge Regression','KMeans Clustering'])
 
     st.write('Please set the test data size')
     test_s = st.slider("Slide me", min_value=0.0, max_value=1.0, step=0.01, value=0.2)
@@ -212,80 +217,78 @@ with st.expander("See explanation"):
         scaler= StandardScaler()
         x_train=scaler.fit_transform(x_train)
         x_test=scaler.transform(x_test)
+    if model_selected!='Select one option':
+        # KNN Model
+        if model_selected=='KNN':
+            n_neighbors = st.number_input('Please set the number of neighbors: ',min_value=1,max_value=15)
+            knn=KNeighborsClassifier(n_neighbors)
+            knn.fit(x_train,y_train)
+            y_pred=knn.predict(x_test)
+            st.write('KNN Modelling Score: ',knn.score(x_test,y_test))
+            st.write('Confusion Matrix: ',confusion_matrix(y_test,y_pred))
+            st.write('Classification Reprot: ')
+            st.code(classification_report(y_test,y_pred))
 
-    # KNN Model
-    if model_selected=='KNN':
-        n_neighbors = st.number_input('Please set the number of neighbors: ',min_value=1,max_value=15)
-        knn=KNeighborsClassifier(n_neighbors)
-        knn.fit(x_train,y_train)
-        y_pred=knn.predict(x_test)
-        st.write('KNN Modelling Score: ',knn.score(x_test,y_test))
-        st.write('Confusion Matrix: ',confusion_matrix(y_test,y_pred))
-        st.write('Classification Reprot: ')
-        st.code(classification_report(y_test,y_pred))
+        # KMeans Clustering
+        if model_selected=='KMeans Clustering':
+            n_clusters = st.number_input('Please set the number of clusters: ',min_value=1,max_value=15)
+            model=KMeans(n_clusters)
+            model.fit(x_train)
+            labels=model.predict(x_train)
+            new_labels=model.predict(x_test)
 
+            st.write('accuracy: ',model.score(x_test,y_test))
+            st.write('Model Inertia: ',model.inertia_)
+            # Cross Tabulation
+            dddf=pd.DataFrame({'labels':labels,'NObeyesdad':y_train})
+            ct=pd.crosstab(dddf['labels'],dddf['NObeyesdad'])
+            st.write('Cross Tabualtion:',ct)
 
-    # KMeans Clustering
-    if model_selected=='KMeans Clustering':
-        n_clusters = st.number_input('Please set the number of clusters: ',min_value=1,max_value=15)
-        model=KMeans(n_clusters)
-        model.fit(x_train)
-        labels=model.predict(x_train)
-        new_labels=model.predict(x_test)
+            fig = plt.figure(figsize=(8,6))
+            plt.scatter(x_train[:,0],x_train[:,1],c=labels)
+            plt.title('KMeans Clustering')  
+            st.pyplot(fig)
 
+            centroids=model.cluster_centers_
+            centroids_x=centroids[:,0]
+            centroids_y=centroids[:,1]
+            fig = plt.figure(figsize=(8,6))
+            plt.scatter(centroids_x,centroids_y,s=50)
+            plt.title('Centroids')
+            st.pyplot(fig)
 
-        st.write('accuracy: ',model.score(x_test,y_test))
-        st.write('Model Inertia: ',model.inertia_)
-        # Cross Tabulation
-        dddf=pd.DataFrame({'labels':labels,'NObeyesdad':y_train})
-        ct=pd.crosstab(dddf['labels'],dddf['NObeyesdad'])
-        st.write('Cross Tabualtion:',ct)
+        # Ridge Regression
+        if model_selected=='Ridge Regression':
+            scores=[]
+            alpha_min = st.number_input('Please set the minimum value for the alpha : ',min_value=0,max_value=100)
+            alpha_max = st.number_input('Please set the maximum value for the alpha: ',min_value=0,max_value=100)
+            alpha_step = st.number_input('Please set the step: ',min_value=0.0,max_value=100.0)
+            for alpha in np.arange(alpha_min,alpha_max,alpha_step):
+                ridge=Ridge(alpha=alpha)
+                ridge.fit(x_train,y_train)
+                scores.append(ridge.score(x_test,y_test))
 
-        fig = plt.figure(figsize=(8,6))
-        plt.scatter(x_train[:,0],x_train[:,1],c=labels)
-        plt.title('KMeans Clustering')  
-        st.pyplot(fig)
+            fig=plt.figure(figsize=(8,6))
+            plt.plot(np.arange(alpha_min,alpha_max,alpha_step),scores)
+            plt.title('Alpha in Ridge Regression')
+            st.pyplot(fig)
 
-        centroids=model.cluster_centers_
-        centroids_x=centroids[:,0]
-        centroids_y=centroids[:,1]
-        fig = plt.figure(figsize=(8,6))
-        plt.scatter(centroids_x,centroids_y,s=50)
-        plt.title('Centroids')
-        st.pyplot(fig)
-
-
-    # Ridge Regression
-    if model_selected=='Ridge Regression':
-        scores=[]
-        alpha_min = st.number_input('Please set the minimum value for the alpha : ',min_value=0,max_value=100)
-        alpha_max = st.number_input('Please set the maximum value for the alpha: ',min_value=0,max_value=100)
-        alpha_step = st.number_input('Please set the step: ',min_value=0.0,max_value=100.0)
-        for alpha in np.arange(alpha_min,alpha_max,alpha_step):
-            ridge=Ridge(alpha=alpha)
+            Alpha= np.arange(alpha_min,alpha_max,alpha_step)[scores.index(max(scores))]
+            ridge=Ridge(alpha=Alpha)
             ridge.fit(x_train,y_train)
-            scores.append(ridge.score(x_test,y_test))
+            st.write('Ridge Model: The Best Score: ',ridge.score(x_test,y_test))
 
-        fig=plt.figure(figsize=(8,6))
-        plt.plot(np.arange(alpha_min,alpha_max,alpha_step),scores)
-        plt.title('Alpha in Ridge Regression')
-        st.pyplot(fig)
-
-        Alpha= np.arange(alpha_min,alpha_max,alpha_step)[scores.index(max(scores))]
-        ridge=Ridge(alpha=Alpha)
-        ridge.fit(x_train,y_train)
-        st.write('Ridge Model: The Best Score: ',ridge.score(x_test,y_test))
-
-
-    # Linear Regression
-    if model_selected=='Linear Regression':
-        linear_Reg=LinearRegression()
-        linear_Reg.fit(x_train,y_train)
-        y_pred=linear_Reg.predict(x_test)
-        st.write('R^2: ',linear_Reg.score(x_test,y_test))
-        st.write('MSE: ',mean_squared_error(y_test,y_pred))
-        st.write('RMSE: ',np.sqrt(mean_squared_error(y_test,y_pred)))
+        # Linear Regression
+        if model_selected=='Linear Regression':
+            linear_Reg=LinearRegression()
+            linear_Reg.fit(x_train,y_train)
+            y_pred=linear_Reg.predict(x_test)
+            st.write('R^2: ',linear_Reg.score(x_test,y_test))
+            st.write('MSE: ',mean_squared_error(y_test,y_pred))
+            st.write('RMSE: ',np.sqrt(mean_squared_error(y_test,y_pred)))
     
+
+
 
 
 
