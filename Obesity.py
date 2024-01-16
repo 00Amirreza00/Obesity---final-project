@@ -19,8 +19,9 @@ if st.button('Variables table'):
 if st.button('Raw data'):
     st.write(df)
 
-st.sidebar.title('Variables table')
-st.sidebar.write(pd.read_csv('variables_table.csv').iloc[5:,[0,3]].reset_index(drop=True))
+# st.sidebar.title('Variables:')
+if st.sidebar.button('Variables Table'):
+    st.sidebar.write(pd.read_csv('variables_table.csv').iloc[5:,[0,3]].reset_index(drop=True))
 
 st.subheader('Data Cleaning and Preprocessing')
 with st.expander("See explanation"):
@@ -189,7 +190,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.linear_model import Ridge
+# from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix,  mean_squared_error
 from sklearn.metrics import classification_report
@@ -200,11 +201,11 @@ with st.expander("See explanation"):
     st.write('The data is split into train and test sets and then the following models are trained and evaluated:')
     st.write('1. Linear Regression')
     st.write('2. KNN')
-    st.write('3. Ridge Regression')
-    st.write('4. KMeans Clustering')
+    # st.write('3. Ridge Regression')
+    st.write('3. KMeans Clustering')
 
 
-    model_selected= st.selectbox('Select a model:',['Select one option','Linear Regression','KNN','Ridge Regression','KMeans Clustering'])
+    model_selected= st.selectbox('Select a model:',['Select one option','Linear Regression','KNN','KMeans Clustering'])
 
     st.write('Please set the test data size')
     test_s = st.slider("Slide me", min_value=0.0, max_value=1.0, step=0.01, value=0.2)
@@ -257,26 +258,26 @@ with st.expander("See explanation"):
             plt.title('Centroids')
             st.pyplot(fig)
 
-        # Ridge Regression
-        if model_selected=='Ridge Regression':
-            scores=[]
-            alpha_min = st.number_input('Please set the minimum value for the alpha : ',min_value=0,max_value=100)
-            alpha_max = st.number_input('Please set the maximum value for the alpha: ',min_value=0,max_value=100)
-            alpha_step = st.number_input('Please set the step: ',min_value=0.0,max_value=100.0)
-            for alpha in np.arange(alpha_min,alpha_max,alpha_step):
-                ridge=Ridge(alpha=alpha)
-                ridge.fit(x_train,y_train)
-                scores.append(ridge.score(x_test,y_test))
+        # # Ridge Regression
+        # if model_selected=='Ridge Regression':
+        #     scores=[]
+        #     alpha_min = st.number_input('Please set the minimum value for the alpha : ',min_value=0,max_value=100)
+        #     alpha_max = st.number_input('Please set the maximum value for the alpha: ',min_value=0,max_value=100)
+        #     alpha_step = st.number_input('Please set the step: ',min_value=0.0,max_value=100.0)
+        #     for alpha in np.arange(alpha_min,alpha_max,alpha_step):
+        #         ridge=Ridge(alpha=alpha)
+        #         ridge.fit(x_train,y_train)
+        #         scores.append(ridge.score(x_test,y_test))
 
-            fig=plt.figure(figsize=(8,6))
-            plt.plot(np.arange(alpha_min,alpha_max,alpha_step),scores)
-            plt.title('Alpha in Ridge Regression')
-            st.pyplot(fig)
+        #     fig=plt.figure(figsize=(8,6))
+        #     plt.plot(np.arange(alpha_min,alpha_max,alpha_step),scores)
+        #     plt.title('Alpha in Ridge Regression')
+        #     st.pyplot(fig)
 
-            Alpha= np.arange(alpha_min,alpha_max,alpha_step)[scores.index(max(scores))]
-            ridge=Ridge(alpha=Alpha)
-            ridge.fit(x_train,y_train)
-            st.write('Ridge Model: The Best Score: ',ridge.score(x_test,y_test))
+        #     Alpha= np.arange(alpha_min,alpha_max,alpha_step)[scores.index(max(scores))]
+        #     ridge=Ridge(alpha=Alpha)
+        #     ridge.fit(x_train,y_train)
+        #     st.write('Ridge Model: The Best Score: ',ridge.score(x_test,y_test))
 
         # Linear Regression
         if model_selected=='Linear Regression':
